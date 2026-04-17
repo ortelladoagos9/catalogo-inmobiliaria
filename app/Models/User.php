@@ -61,4 +61,8 @@ class User extends Authenticatable
     public function isAdmin(){
         return $this->profiles->description === 'Administrador';
     }
+    // Método para verificar si el usuario es operario
+    public function isOperario(){
+        return $this->profile->description === 'Operario';
+    }
 }
