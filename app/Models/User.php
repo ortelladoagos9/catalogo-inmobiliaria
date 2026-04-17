@@ -17,9 +17,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'profile_id',
         'name',
         'email',
         'password',
+        'status'
     ];
 
     /**
@@ -43,5 +45,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relaciones
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class);        
+    }
+    public function property()
+    {
+        return $this->hasMany(Property::class);
+    }
+
+    // Método para verificar si el usuario es administrador
+    public function isAdmin(){
+        return $this->profiles->description === 'Administrador';
     }
 }
