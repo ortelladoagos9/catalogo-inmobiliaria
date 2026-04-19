@@ -4,10 +4,12 @@ namespace App\Models;
 
 use OwenIt\Auditing\Contracts\Auditable; // Importar la interfaz Auditable
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Property extends Model implements Auditable // Implementar la interfaz Auditable
 {
     use \OwenIt\Auditing\Auditable; // Usar el trait Auditable
+    use SoftDeletes; // Usar el trait SoftDeletes
 
     protected $fillable = [
         'user_id',
@@ -27,9 +29,9 @@ class Property extends Model implements Auditable // Implementar la interfaz Aud
     {
         return $this->belongsTo(User::class);
     }
-    public function status()
+    public function statusProperty()
     {
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(Status::class, 'status_id');
     }
     public function typeProperty()
     {
