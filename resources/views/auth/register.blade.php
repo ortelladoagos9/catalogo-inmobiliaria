@@ -1,4 +1,9 @@
 <x-guest-layout>
+    <div class="text-center mb-8">
+        <h2 class="text-2xl font-semibold text-white mb-2">Registrarse</h2>
+        <p class="text-white/60 text-sm">Crea una nueva cuenta</p>
+    </div>
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
