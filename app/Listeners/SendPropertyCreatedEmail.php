@@ -6,8 +6,9 @@ use App\Events\PropertyCreated;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PropertyCreatedMail;
 use App\Models\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendPropertyCreatedEmail
+class SendPropertyCreatedEmail implements ShouldQueue
 {
     /**
      * Create the event listener.

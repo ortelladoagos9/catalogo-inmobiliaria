@@ -11,7 +11,7 @@ class UpdatePropertyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdatePropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'sometimes|required|string|max:255',
+            'title' => 'sometimes|required|string|max:255|regex:/[a-zA-Z]/',
             'description' => 'nullable|string',
             'surface' => 'sometimes|required|numeric|min:0',
             'rooms' => 'nullable|integer|min:0',
@@ -32,12 +32,23 @@ class UpdatePropertyRequest extends FormRequest
             'type_property_id' => 'sometimes|required|exists:type_properties,id',
             'property_owner_id' => 'sometimes|required|exists:property_owners,id',
             'town_id' => 'sometimes|required|exists:towns,id',
-            
-            'street' => 'sometimes|required|string|max:255',
-            'number' => 'nullable|integer',
+
+            'street' => 'sometimes|required|string|max:255|regex:/^[a-zA-Z\s]+$/',
+            'number' => 'nullable|integer|min:0',
 
             'images' => 'nullable|array',
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.regex' => 'El título debe contener al menos una letra.',
+            'street.regex' => 'La calle solo puede contener letras y espacios.',
+            'surface.min' => 'La superficie debe ser mayor o igual a 0.',
+            'rooms.min' => 'Los ambientes deben ser mayor o igual a 0.',
+            'price.min' => 'El precio debe ser mayor o igual a 0.',
         ];
     }
 }

@@ -11,15 +11,17 @@ class PropertyService
 {
     public function create(array $data, $user)
     {
-        // 1. Crear dirección
-        $addressData = [
-            'street' => $data['street'],
-            'number' => $data['number'] ?? null,
-            'status' => $data['status'] ?? 'active',
-            'town_id' => $data['town_id'],
-        ];
-
-        $address = Address::create($addressData);
+        // 1. Crear dirección con updateOrCreate para mejor control
+        $address = Address::updateOrCreate(
+            [
+                'street' => $data['street'],
+                'number' => $data['number'] ? (int)$data['number'] : null,
+                'town_id' => $data['town_id'],
+            ],
+            [
+                'status' => true,
+            ]
+        );
 
         // 2. Armar datos de propiedad
         $propertyData = [
@@ -33,7 +35,7 @@ class PropertyService
             'description' => $data['description'] ?? null,
             'surface' => $data['surface'],
             'rooms' => $data['rooms'] ?? null,
-            'status' => $data['status'] ?? 'active',
+            'status' => true,
         ];
 
         // 3. crear propiedad
@@ -42,7 +44,6 @@ class PropertyService
         // 4. guardar imágenes
         if (isset($data['images']) && is_array($data['images'])) {
             foreach ($data['images'] as $image) {
-
                 $path = $image->store('properties', 'public');
 
                 Picture::create([
@@ -68,8 +69,8 @@ class PropertyService
         // actualizar dirección
         $property->address->update([
             'street' => $data['street'],
-            'number' => $data['number'] ?? null,
-            'status' => $data['status'] ?? 'active',
+            'number' => $data['number'] ? (int)$data['number'] : null,
+            'status' => true,
             'town_id' => $data['town_id'],
         ]);
 
@@ -94,6 +95,7 @@ class PropertyService
 
     public function delete(Property $property)
     {
-        $property->delete();
+        $property->update(['status' => false]);
+        return $property;
     }
 }

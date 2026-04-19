@@ -7,10 +7,12 @@ use App\Models\Status;
 use App\Models\Town;
 use App\Models\TypeProperty;
 use App\Models\PropertyOwner;
+use App\Models\Picture;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
 use App\Services\PropertyService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
@@ -24,7 +26,9 @@ class PropertyController extends Controller
 
     public function index()
     {
-        $properties = Property::with(['address', 'pictures'])->paginate(10);
+        $properties = Property::with(['address.town.province', 'picture', 'statusProperty'])
+            ->where('status', true)
+            ->paginate(10);
 
         return view('properties.index', compact('properties'));
     }
@@ -37,7 +41,7 @@ class PropertyController extends Controller
             'statuses' => Status::all(),
             'types' => TypeProperty::all(),
             'owners' => PropertyOwner::all(),
-            'towns' => Town::all(),
+            'towns' => Town::with('province')->get(),
         ]);
     }
 
@@ -60,7 +64,7 @@ class PropertyController extends Controller
             'statuses' => Status::all(),
             'types' => TypeProperty::all(),
             'owners' => PropertyOwner::all(),
-            'towns' => Town::all(),
+            'towns' => Town::with('province')->get(),
         ]);
     }
 
@@ -78,9 +82,30 @@ class PropertyController extends Controller
     {
         $this->authorize('delete', $property);
 
-        $this->service->delete($property, Auth::user());
+        // Soft delete: marcar como inactivo
+        $property->update(['status' => false]);
 
         return redirect()->route('properties.index')
-            ->with('success', 'Propiedad eliminada');
+            ->with('success', 'Propiedad eliminada (inactiva)');
+    }
+
+    public function destroyImage(Property $property, Picture $picture)
+    {
+        $this->authorize('update', $property);
+
+        // Verificar que la imagen pertenece a la propiedad
+        if ($picture->property_id !== $property->id) {
+            abort(403);
+        }
+
+        // Eliminar archivo físico
+        if (Storage::disk('public')->exists($picture->path)) {
+            Storage::disk('public')->delete($picture->path);
+        }
+
+        // Eliminar registro de la base de datos
+        $picture->delete();
+
+        return redirect()->back()->with('success', 'Imagen eliminada correctamente');
     }
 }
