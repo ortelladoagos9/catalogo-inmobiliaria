@@ -4,16 +4,22 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <title>@yield('title', 'Inmobiliaria')</title>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="bg-gray-100">
+    <body class="bg-black">
         @include('components.navbar')
 
-        <main class="p-6">
+        <main class="relative">
+            <!-- Flash Messages -->
+            <div class="fixed top-20 left-0 right-0 z-40 px-6">
+                @include('components.flash-messages')
+            </div>
+
             @yield('content')
         </main>
 
