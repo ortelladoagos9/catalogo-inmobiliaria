@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('properties', PropertyController::class);
+    Route::delete('properties/{property}/images/{picture}', [PropertyController::class, 'destroyImage'])->name('properties.images.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {
