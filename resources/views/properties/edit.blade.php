@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('breadcrumb')
+<x-breadcrumb :items="[
+    ['label' => 'Ver propiedades', 'url' => route('properties.index')],
+    ['label' => 'Editar propiedad']
+]" />
+@endsection
+
 @section('content')
 <div class="min-h-screen bg-gray-950 text-white px-6 py-10">
 
