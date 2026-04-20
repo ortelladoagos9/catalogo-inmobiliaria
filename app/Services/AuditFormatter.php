@@ -63,6 +63,13 @@ class AuditFormatter
             case 'property_owner_id':
                 return ['Responsable', PropertyOwner::find($value)?->name];
 
+            case 'address_id':
+                $address = Address::with('town.province')->find($value);
+
+                if (!$address) return ['Dirección', '—'];
+
+                return ['Dirección', "{$address->street} {$address->number}, {$address->town->name}, {$address->town->province->name}"];
+
             case 'street':
                 return ['Calle', $value];
             
