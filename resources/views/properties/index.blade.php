@@ -25,6 +25,34 @@
         </a>
     </div>
 
+    <!-- Filtros -->
+    <div class="max-w-7xl mx-auto mb-6">
+        <form method="GET" action="{{ route('properties.index') }}" class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-white/70 mb-2">Título</label>
+                    <input type="text" name="title" id="title" value="{{ request('title') }}" placeholder="Buscar por título" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="availability" class="block text-sm font-medium text-white/70 mb-2">Disponibilidad</label>
+                    <input type="text" name="availability" id="availability" value="{{ request('availability') }}" placeholder="Buscar por disponibilidad" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="town" class="block text-sm font-medium text-white/70 mb-2">Localidad</label>
+                    <input type="text" name="town" id="town" value="{{ request('town') }}" placeholder="Buscar por localidad" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="province" class="block text-sm font-medium text-white/70 mb-2">Provincia</label>
+                    <input type="text" name="province" id="province" value="{{ request('province') }}" placeholder="Buscar por provincia" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+            <div class="flex gap-4 mt-4">
+                <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">Filtrar</button>
+                <a href="{{ route('properties.index') }}" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition">Limpiar</a>
+            </div>
+        </form>
+    </div>
+
     <!-- Contenedor -->
     <div class="max-w-7xl mx-auto">
 
@@ -39,7 +67,6 @@
                         <th class="p-4">Precio</th>
                         <th class="p-4">Ubicación</th>
                         <th class="p-4">Disponibilidad</th>
-                       <!--  <th class="p-4">Estado</th>-->
                         <th class="p-4 text-right">Acciones</th>
                     </tr>
                 </thead>
@@ -72,13 +99,6 @@
                                 {{ $property->statusProperty ? $property->statusProperty->description : '—' }}
                             </span>
                         </td>
-
-                        <!--<td class="p-4">
-                            <span class="px-3 py-1 rounded-full text-xs 
-                               {{ $property->status ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400' }}">
-                                {{ $property->status ? 'Activo' : 'Inactivo' }}
-                            </span>
-                        </td>-->
 
                         <td class="p-4 text-right space-x-3">
 
@@ -140,9 +160,6 @@
                     <span class="px-3 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">
                         {{ $property->statusProperty ? $property->statusProperty->description : '—' }}
                     </span>
-                    <!--<span class="px-3 py-1 rounded-full text-xs {{ $property->status ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400' }}">
-                        {{ $property->status ? 'Activo' : 'Inactivo' }}
-                    </span>-->
                 </div>
 
                 <div class="flex justify-between items-center">
@@ -183,12 +200,12 @@
 </div>
 
 <script>
-function confirmDelete(propertyId, propertyTitle, type = '') {
-    const formId = type === 'mobile' ? `delete-form-mobile-${propertyId}` : `delete-form-${propertyId}`;
+    function confirmDelete(propertyId, propertyTitle, type = '') {
+        const formId = type === 'mobile' ? `delete-form-mobile-${propertyId}` : `delete-form-${propertyId}`;
 
-    if (confirm(`¿Estás seguro de que quieres eliminar la propiedad "${propertyTitle}"?\n\nEsta acción marcará la propiedad como inactiva.`)) {
-        document.getElementById(formId).submit();
+        if (confirm(`¿Estás seguro de que quieres eliminar la propiedad "${propertyTitle}"?\n\nEsta acción marcará la propiedad como inactiva.`)) {
+            document.getElementById(formId).submit();
+        }
     }
-}
 </script>
 @endsection

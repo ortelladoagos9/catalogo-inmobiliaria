@@ -26,9 +26,30 @@ class PropertyController extends Controller
 
     public function index()
     {
-        $properties = Property::with(['address.town.province', 'picture', 'statusProperty'])
-            ->where('status', true)
-            ->paginate(10);
+        $query = Property::with(['address.town.province', 'picture', 'statusProperty'])
+            ->where('status', true);
+
+        // Filtros
+        if (request('title')) {
+            $query->where('title', 'like', '%' . request('title') . '%');
+        }
+        if (request('availability')) {
+            $query->whereHas('statusProperty', function ($q) {
+                $q->where('description', 'like', '%' . request('availability') . '%');
+            });
+        }
+        if (request('town')) {
+            $query->whereHas('address.town', function ($q) {
+                $q->where('name', 'like', '%' . request('town') . '%');
+            });
+        }
+        if (request('province')) {
+            $query->whereHas('address.town.province', function ($q) {
+                $q->where('name', 'like', '%' . request('province') . '%');
+            });
+        }
+
+        $properties = $query->latest()->paginate(10);
 
         return view('properties.index', compact('properties'));
     }
