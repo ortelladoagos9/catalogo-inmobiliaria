@@ -89,14 +89,9 @@ class PropertyController extends Controller
             ->with('success', 'Propiedad eliminada (inactiva)');
     }
 
-    public function destroyImage(Property $property, Picture $picture)
+    public function destroyImage(Property $property, $pictureId)
     {
-        $this->authorize('update', $property);
-
-        // Verificar que la imagen pertenece a la propiedad
-        if ($picture->property_id !== $property->id) {
-            abort(403);
-        }
+        $picture = $property->picture()->findOrFail($pictureId);
 
         // Eliminar archivo físico
         if (Storage::disk('public')->exists($picture->path)) {
@@ -106,6 +101,6 @@ class PropertyController extends Controller
         // Eliminar registro de la base de datos
         $picture->delete();
 
-        return redirect()->back()->with('success', 'Imagen eliminada correctamente');
+        return response()->json(['success' => true]);
     }
 }
