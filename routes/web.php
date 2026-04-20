@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\AuditController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,10 +24,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('properties/{property}/images/{picture}', [PropertyController::class, 'destroyImage'])->name('properties.images.destroy');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/audits', function () {
-        return view('audit.index');
-    })->name('audit.index');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/audits', [AuditController::class, 'index'])->name('audit.index');
 });
 
 require __DIR__.'/auth.php';

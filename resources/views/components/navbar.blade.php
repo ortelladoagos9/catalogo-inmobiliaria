@@ -24,7 +24,7 @@
 
                 @if(auth()->user()->isAdmin())
                     <a href="{{ route('audit.index') }}" class="text-white/80 hover:text-fuchsia-500 transition">
-                        Ver auditoría
+                        Auditorías
                     </a>
                 @endif
 
