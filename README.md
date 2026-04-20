@@ -12,23 +12,23 @@ Además, cuenta con un diseño **100% responsive**, adaptable a distintos dispos
 
 ## Funcionalidades implementadas
 
-- ✔️ Autenticación de usuarios (login, registro, logout)
-- ✔️ Gestión completa de propiedades (CRUD)
-- ✔️ Carga y eliminación de imágenes por propiedad
-- ✔️ Gestión de direcciones (calle, número, localidad, provincia)
-- ✔️ Relación con responsables de propiedad
-- ✔️ Manejo de estados (activo/inactivo)
-- ✔️ Eliminación lógica (soft delete)
-- ✔️ Sistema de auditoría completo:
+- Autenticación de usuarios (login, registro, logout)
+- Gestión completa de propiedades (CRUD)
+- Carga y eliminación de imágenes por propiedad
+- Gestión de direcciones (calle, número, localidad, provincia)
+- Relación con responsables de propiedad
+- Manejo de estados (activo/inactivo)
+- Eliminación lógica (soft delete)
+- Sistema de auditoría completo:
     - Registro de creación, edición y eliminación
     - Visualización de valores anteriores y nuevos
     - Identificación de usuario, fecha y acción
-- ✔️ Envío de notificaciones por correo (asincrónico con colas)
-
-- ✔️ Validaciones tanto en frontend como backend
-- ✔️ Filtros para búsquedas rápidas y paginación
-- ✔️ Interfaz moderna con Tailwind CSS
-- ✔️ Diseño responsive (mobile + desktop)
+- Envío de notificaciones por correo (asincrónico con colas)
+- Verificación de correo por gmail
+- Validaciones tanto en frontend como backend
+- Filtros para búsquedas rápidas y paginación
+- Interfaz moderna con Tailwind CSS
+- Diseño responsive (mobile + desktop)
 
 ---
 
