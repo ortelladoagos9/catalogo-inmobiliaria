@@ -115,9 +115,7 @@
                                 @csrf
                                 @method('DELETE')
 
-                                <button type="button"
-                                        onclick="confirmDelete({{ $property->id }}, '{{ $property->title }}')"
-                                        class="text-red-400 hover:text-red-300 transition">
+                                <button type="button" data-id="{{ $property->id }}" data-title="{{ $property->title }}" data-type="desktop" class="delete-property-btn text-red-400 hover:text-red-300 transition">
                                     Eliminar
                                 </button>
                             </form>
@@ -135,7 +133,7 @@
             </table>
         </div>
 
-        <!-- MOBILE (cards) -->
+        <!------------------------------------ MOBILE (cards) ----------------------------------------------->
         <div class="md:hidden space-y-4">
             @forelse($properties as $property)
             <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-5">
@@ -174,9 +172,7 @@
                         @csrf
                         @method('DELETE')
 
-                        <button type="button"
-                                onclick="confirmDelete({{ $property->id }}, '{{ $property->title }}', 'mobile')"
-                                class="text-red-400 text-sm">
+                        <button type="button" data-id="{{ $property->id }}" data-title="{{ $property->title }}" data-type="mobile" class="delete-property-btn text-red-400 text-sm">
                             Eliminar
                         </button>
                     </form>
@@ -198,14 +194,4 @@
 
     </div>
 </div>
-
-<script>
-    function confirmDelete(propertyId, propertyTitle, type = '') {
-        const formId = type === 'mobile' ? `delete-form-mobile-${propertyId}` : `delete-form-${propertyId}`;
-
-        if (confirm(`¿Estás seguro de que quieres eliminar la propiedad "${propertyTitle}"?\n\nEsta acción marcará la propiedad como inactiva.`)) {
-            document.getElementById(formId).submit();
-        }
-    }
-</script>
 @endsection

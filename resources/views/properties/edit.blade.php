@@ -199,11 +199,11 @@
                         @foreach($property->picture as $image)
                             <div class="relative group">
                                 <img src="{{ Storage::url($image->path) }}" alt="Imagen de propiedad"
-                                     class="w-20 h-20 object-cover rounded-lg border border-white/20">
+                                class="w-20 h-20 object-cover rounded-lg border border-white/20">
                                 <button type="button"
-                                    data-id="{{ $image->id }}"
-                                    onclick="event.preventDefault(); deleteImage(this)"
-                                    class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 flex items-center justify-center">
+                                    data-image-id="{{ $image->id }}"
+                                    data-property-id="{{ $property->id }}"
+                                    class="delete-image-btn absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 flex items-center justify-center">
                                     ×
                                 </button>
                             </div>
@@ -227,144 +227,19 @@
             <!-- Botón -->
             <div class="pt-4">
                 <button type="submit"
-                        class="w-full md:w-auto px-8 py-3 rounded-full
+                        class="w-full md:w-auto px-8 py-3 rounded-full mb-6
                                bg-gradient-to-r from-indigo-500 to-purple-600
-                               text-white font-semibold shadow-lg shadow-purple-500/20
+                               text-white font-semibold shadow-lg shadow-purple-500/10
                                hover:scale-105 transition">
                     Actualizar propiedad
                 </button>
                 <a href="{{ route('properties.index') }}"
                    class="ml-4 text-white/60 hover:text-white transition">
-                    Cancelar
-                </a>
+                    Cancelar 
+                </a> 
             </div>
 
         </form>
     </div>
 </div>
-<script>
-
-    function deleteImage(button) {
-        const imageId = button.dataset.id;
-        const propertyId = {{ $property->id }};
-
-        if (!confirm('¿Eliminar esta imagen?')) return;
-
-        fetch(`/properties/${propertyId}/images/${imageId}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json'
-            },
-            credentials: 'same-origin' 
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Error en request');
-            return res.json();
-        })
-        .then(() => {
-            button.closest('div').remove();
-        })
-        .catch(err => {
-            console.error(err);
-            alert('Error al eliminar imagen');
-        });
-    }
-
-    // Validación del lado del cliente
-    document.addEventListener('DOMContentLoaded', function() {
-        // Validar inputs numéricos para no permitir negativos
-        const numericInputs = document.querySelectorAll('input[type="number"]');
-        numericInputs.forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value < 0) {
-                    this.value = 0;
-                }
-            });
-
-            input.addEventListener('keydown', function(e) {
-                // Prevenir entrada de números negativos
-                if (e.key === '-' || e.key === 'e') {
-                    e.preventDefault();
-                }
-            });
-        });
-
-        // Validar campo de calle para solo letras y espacios
-        const streetInput = document.querySelector('input[name="street"]');
-        if (streetInput) {
-            streetInput.addEventListener('input', function() {
-                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
-            });
-        }
-
-        // Validar título para asegurar que tenga al menos una letra
-        const titleInput = document.querySelector('input[name="title"]');
-        if (titleInput) {
-            titleInput.addEventListener('input', function() {
-                // Remover números del inicio si no hay letras
-                if (!/[a-zA-Z]/.test(this.value)) {
-                    this.value = this.value.replace(/^\d+/, '');
-                }
-            });
-        }
-
-        // Preview de imágenes nuevas
-        const imagesInput = document.getElementById('images-input');
-        const imagesPreview = document.getElementById('images-preview');
-
-        if (imagesInput && imagesPreview) {
-            imagesInput.addEventListener('change', function(e) {
-                imagesPreview.innerHTML = ''; // Limpiar preview anterior
-
-                if (this.files.length > 0) {
-                    imagesPreview.classList.remove('hidden');
-
-                    Array.from(this.files).forEach((file, index) => {
-                        if (file.type.startsWith('image/')) {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                const imageContainer = document.createElement('div');
-                                imageContainer.className = 'relative group';
-
-                                const img = document.createElement('img');
-                                img.src = e.target.result;
-                                img.className = 'w-20 h-20 object-cover rounded-lg border border-white/20';
-                                img.alt = `Nueva imagen ${index + 1}`;
-
-                                const removeBtn = document.createElement('button');
-                                removeBtn.type = 'button';
-                                removeBtn.className = 'absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center';
-                                removeBtn.innerHTML = '×';
-                                removeBtn.onclick = function() {
-                                    // Remover imagen del input file
-                                    const dt = new DataTransfer();
-                                    const files = Array.from(imagesInput.files);
-                                    files.splice(index, 1);
-                                    files.forEach(file => dt.items.add(file));
-                                    imagesInput.files = dt.files;
-
-                                    // Remover del preview
-                                    imageContainer.remove();
-
-                                    // Ocultar preview si no hay imágenes
-                                    if (imagesInput.files.length === 0) {
-                                        imagesPreview.classList.add('hidden');
-                                    }
-                                };
-
-                                imageContainer.appendChild(img);
-                                imageContainer.appendChild(removeBtn);
-                                imagesPreview.appendChild(imageContainer);
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    });
-                } else {
-                    imagesPreview.classList.add('hidden');
-                }
-            });
-        }
-    });
-</script>
 @endsection
