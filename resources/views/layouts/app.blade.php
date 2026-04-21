@@ -21,7 +21,7 @@
             <!-- Flash Messages -->
             <div class="fixed top-20 left-0 right-0 z-40 px-6">
                 @include('components.flash-messages')
-            </div>
+            </div> 
 
             @yield('content')
         </main>

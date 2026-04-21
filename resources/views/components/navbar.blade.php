@@ -7,7 +7,7 @@
             <p class="hidden md:block text-sm text-white/80 text-center flex-1">
                 {{ auth()->user()->name }}
             </p>
-            <p class="md:hidden text-xs text-white/80 absolute left-1/2 transform -translate-x-1/2 top-5">
+            <p class="md:hidden text-xs text-white/80 font-bold absolute left-1/2 transform -translate-x-1/2 top-5 mt-2 ml-8">
                 {{ auth()->user()->name }}
             </p>
         @else
